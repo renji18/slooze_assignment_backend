@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  password  String
+  roleId    String
+  countryId String
+  role      Role    @relation(fields: [roleId], references: [id])
+  country   Country @relation(fields: [countryId], references: [id])
+}
+
+model Role {
+  id    String @id @default(uuid())
+  name  String @unique
+  users User[]
+}
+
+model Country {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  users       User[]
+  restaurants Restaurant[]
+}
+
+model Restaurant {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  countryId String
+  country   Country    @relation(fields: [countryId], references: [id])
+  menuItems MenuItem[]
+}
+
+model MenuItem {
+  id           String      @id @default(uuid())
+  name         String
+  price        Float
+  restaurantId String
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  OrderItem    OrderItem[]
+
+  @@unique([name, restaurantId])
+}
+
+model Order {
+  id              String         @id @default(uuid())
+  status          String // e.g., 'pending', 'paid', 'cancelled'
+  paymentMethodId String?
+  totalAmount     Float
+  createdAt       DateTime       @default(now())
+  items           OrderItem[]
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  menuItemId String
+  quantity   Int
+  itemTotal  Float
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model PaymentMethod {
+  id     String  @id @default(uuid())
+  method String  @unique
+  orders Order[]
+}
