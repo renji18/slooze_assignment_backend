@@ -18,8 +18,8 @@ This is a role-based backend system for a food ordering application built using 
 ### 1. Clone & Install
 
 ```code
-git clone <your-repo-url>
-cd backend
+git clone https://github.com/renji18/slooze_assignment_backend.git
+cd slooze_assignment_backend
 npm install
 ```
 
@@ -65,11 +65,11 @@ password123
 
 ### 4. Start the App
 
+The server should be running on port 8000, if not, please modify the base url in the frontend in src/lib/axios.ts
+
 ```code
 npm run start:dev
 ```
-
-The server will start on port 8000
 
 ## API Endpoints
 
