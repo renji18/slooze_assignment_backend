@@ -61,6 +61,7 @@ model Order {
   status          String // e.g., 'pending', 'paid', 'cancelled'
   paymentMethodId String?
   totalAmount     Float
+  region          String
   createdAt       DateTime       @default(now())
   items           OrderItem[]
   paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])

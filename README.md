@@ -36,16 +36,31 @@ JWT_SECRET=your_jwt_secret
 npm run seed
 ```
 
-This will run the prisma migrations and seed the database with the following starter template. Running this command is
-MANDATORY!!!
+This will run the prisma migrations and seed the database with the following starter template. Running this command is important to load sample data in the database.
 
 ```code
-addRoles;
-addCountries;
-addUsers;
-addRestaurants;
-addMenuItems;
-addPaymentMethod;
+addRoles
+addCountries
+addUsers
+addRestaurants
+addMenuItems
+addPaymentMethod
+```
+
+You will get access to sample users, sample restaurants with preset menu.
+
+```code
+nick@shield.com
+marvel@team.com
+cap@team.com
+thanos@team.com
+thor@team.com
+travis@team.com
+```
+
+password for all the users is
+```code
+password123
 ```
 
 ### 4. Start the App
@@ -66,6 +81,7 @@ The server will start on port 8000
 
 ```code
 POST /auth/login
+POST /auth/logout
 ```
 
 ### User

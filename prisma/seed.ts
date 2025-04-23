@@ -97,8 +97,10 @@ async function addRestaurants() {
   const restaurants = [
     { name: 'Tandoori Treats', countryId: india.id },
     { name: 'Mumbai Biryani House', countryId: india.id },
+    { name: 'Dilli Chaat Bazaar', countryId: india.id },
     { name: 'Burger Planet', countryId: america.id },
     { name: 'New York Pizza Co.', countryId: america.id },
+    { name: 'California Sushi Station', countryId: america.id },
   ];
 
   for (const rest of restaurants) {
@@ -122,26 +124,92 @@ async function addMenuItems() {
       price: 180,
       restaurantName: 'Tandoori Treats',
     },
-    { name: 'Biryani', price: 220, restaurantName: 'Mumbai Biryani House' },
-    { name: 'Veg Thali', price: 150, restaurantName: 'Mumbai Biryani House' },
-    { name: 'Cheeseburger', price: 8.5, restaurantName: 'Burger Planet' },
+    { name: 'Tandoori Roti', price: 20, restaurantName: 'Tandoori Treats' },
+    { name: 'Dal Makhani', price: 160, restaurantName: 'Tandoori Treats' },
+    { name: 'Butter Chicken', price: 220, restaurantName: 'Tandoori Treats' },
+
+    {
+      name: 'Chicken Biryani',
+      price: 250,
+      restaurantName: 'Mumbai Biryani House',
+    },
+    { name: 'Veg Biryani', price: 200, restaurantName: 'Mumbai Biryani House' },
+    { name: 'Egg Biryani', price: 220, restaurantName: 'Mumbai Biryani House' },
+    { name: 'Raita', price: 40, restaurantName: 'Mumbai Biryani House' },
+    { name: 'Gulab Jamun', price: 70, restaurantName: 'Mumbai Biryani House' },
+
+    {
+      name: 'Aloo Tikki Chaat',
+      price: 60,
+      restaurantName: 'Dilli Chaat Bazaar',
+    },
+    { name: 'Papdi Chaat', price: 55, restaurantName: 'Dilli Chaat Bazaar' },
+    { name: 'Dahi Bhalla', price: 65, restaurantName: 'Dilli Chaat Bazaar' },
+    { name: 'Raj Kachori', price: 75, restaurantName: 'Dilli Chaat Bazaar' },
+    { name: 'Pani Puri', price: 40, restaurantName: 'Dilli Chaat Bazaar' },
+
+    { name: 'Cheeseburger', price: 85, restaurantName: 'Burger Planet' },
     {
       name: 'Double Patty Burger',
-      price: 11.0,
+      price: 110,
       restaurantName: 'Burger Planet',
     },
+    { name: 'Bacon Burger', price: 120, restaurantName: 'Burger Planet' },
+    {
+      name: 'Crispy Chicken Burger',
+      price: 100,
+      restaurantName: 'Burger Planet',
+    },
+    { name: 'Veggie Burger', price: 90, restaurantName: 'Burger Planet' },
+
     {
       name: 'Pepperoni Pizza',
-      price: 14.5,
+      price: 145,
       restaurantName: 'New York Pizza Co.',
     },
     {
       name: 'Veggie Delight Pizza',
-      price: 13.0,
+      price: 130,
       restaurantName: 'New York Pizza Co.',
     },
-  ];
+    {
+      name: 'BBQ Chicken Pizza',
+      price: 150,
+      restaurantName: 'New York Pizza Co.',
+    },
+    {
+      name: 'Four Cheese Pizza',
+      price: 160,
+      restaurantName: 'New York Pizza Co.',
+    },
+    { name: 'Margherita', price: 120, restaurantName: 'New York Pizza Co.' },
 
+    {
+      name: 'California Roll',
+      price: 100,
+      restaurantName: 'California Sushi Station',
+    },
+    {
+      name: 'Tuna Nigiri',
+      price: 80,
+      restaurantName: 'California Sushi Station',
+    },
+    {
+      name: 'Avocado Roll',
+      price: 90,
+      restaurantName: 'California Sushi Station',
+    },
+    {
+      name: 'Dragon Roll',
+      price: 110,
+      restaurantName: 'California Sushi Station',
+    },
+    {
+      name: 'Miso Soup',
+      price: 45,
+      restaurantName: 'California Sushi Station',
+    },
+  ];
   for (const item of items) {
     const restaurant = allRestaurants.find(
       (r) => r.name === item.restaurantName,

@@ -10,7 +10,10 @@ import { PrismaService } from 'src/prisma.service';
 export class OrderService {
   constructor(private prisma: PrismaService) {}
 
-  async createOrder(items: { menuItemId: string; quantity: number }[]) {
+  async createOrder(
+    items: { menuItemId: string; quantity: number }[],
+    user: any,
+  ) {
     try {
       if (!items || items.length === 0)
         throw new BadRequestException('Order must include at least one item');
@@ -36,10 +39,13 @@ export class OrderService {
         };
       });
 
+      const region = user.role === 'ADMIN' ? 'all' : user.country;
+
       return await this.prisma.order.create({
         data: {
           status: 'pending',
           totalAmount,
+          region,
           items: {
             create: orderItems,
           },
@@ -66,7 +72,7 @@ export class OrderService {
     }
   }
 
-  async placeOrder(orderId: string, paymentMethodId: string) {
+  async placeOrder(orderId: string, paymentMethodId: string, user: any) {
     try {
       const existing = await this.prisma.order.findUnique({
         where: { id: orderId },
@@ -81,19 +87,31 @@ export class OrderService {
       if (!paymentMethod)
         throw new NotFoundException('Payment method not found');
 
+      if (user.role === 'MANAGER') {
+        if (existing.region === 'all' || existing.region !== user.country) {
+          throw new BadRequestException(
+            'Managers cannot place orders from this region',
+          );
+        }
+      }
+
       return this.prisma.order.update({
         where: { id: orderId },
         data: { status: 'paid', paymentMethodId },
       });
     } catch (err) {
-      if (err instanceof NotFoundException) throw err;
+      if (
+        err instanceof NotFoundException ||
+        err instanceof BadRequestException
+      )
+        throw err;
 
       console.error('Unexpected error in OrderService.placeOrder:', err);
       throw new InternalServerErrorException('Failed to place order');
     }
   }
 
-  async cancelOrder(orderId: string) {
+  async cancelOrder(orderId: string, user: any) {
     try {
       const existing = await this.prisma.order.findUnique({
         where: { id: orderId },
@@ -102,7 +120,18 @@ export class OrderService {
       if (!existing) throw new NotFoundException('Order not found');
 
       if (existing.status === 'paid')
-        throw new BadRequestException('Order is paid');
+        throw new BadRequestException('Cannot cancel a paid order');
+
+      if (user.role === 'MANAGER') {
+        if (
+          existing.region === 'all' ||
+          existing.region !== user.country
+        ) {
+          throw new BadRequestException(
+            'Managers cannot cancel orders from this region',
+          );
+        }
+      }
 
       return this.prisma.order.update({
         where: { id: orderId },
@@ -120,13 +149,23 @@ export class OrderService {
     }
   }
 
-  async getOrders() {
+  async getOrders(user: any) {
     try {
+      let whereClause = {};
+
+      if (user.role !== 'ADMIN') {
+        whereClause = {
+          OR: [{ region: user.country }, { region: 'all' }],
+        };
+      }
+
       return this.prisma.order.findMany({
+        where: whereClause,
         include: {
           items: { include: { menuItem: true } },
           paymentMethod: true,
         },
+        orderBy: { createdAt: 'desc' },
       });
     } catch (err) {
       console.error('Unexpected error in OrderService.getOrders:', err);

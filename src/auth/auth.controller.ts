@@ -25,7 +25,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('jwt');
+    res.clearCookie('slooze_jwt');
     return { message: 'Logged out successfully' };
   }
 }
