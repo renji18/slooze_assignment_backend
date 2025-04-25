@@ -123,10 +123,7 @@ export class OrderService {
         throw new BadRequestException('Cannot cancel a paid order');
 
       if (user.role === 'MANAGER') {
-        if (
-          existing.region === 'all' ||
-          existing.region !== user.country
-        ) {
+        if (existing.region === 'all' || existing.region !== user.country) {
           throw new BadRequestException(
             'Managers cannot cancel orders from this region',
           );

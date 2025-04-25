@@ -10,7 +10,7 @@ export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @Get()
-  @Roles('ADMIN', 'MANAGER', 'MEMBER')
+  @Roles('MEMBER')
   getRestaurants(@Req() req: any) {
     return this.restaurantService.getRestaurantsByCountry(req.user.countryId);
   }

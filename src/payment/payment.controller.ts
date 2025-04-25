@@ -30,7 +30,7 @@ export class PaymentController {
   }
 
   @Get()
-  @Roles('ADMIN', 'MANAGER')
+  @Roles('MANAGER')
   get() {
     return this.paymentService.getAll();
   }

@@ -11,17 +11,28 @@ import { ROLES_KEY } from './roles.decorator';
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+  levels = {
+    ADMIN: 3,
+    MANAGER: 2,
+    MEMBER: 1,
+  };
 
-    if (!requiredRoles) return true;
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<string>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     const { user } = context.switchToHttp().getRequest();
-    if (!requiredRoles.includes(user.role)) {
-      throw new ForbiddenException(`Role '${user.role}' not authorized for this request`);
+
+    const userAccess = this.levels[user.role];
+
+    const requiredAccess = this.levels[requiredRoles as string];
+
+    if (userAccess < requiredAccess) {
+      throw new ForbiddenException(
+        `Role '${user.role}' not authorized for this request`,
+      );
     }
 
     return true;

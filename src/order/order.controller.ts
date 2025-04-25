@@ -20,7 +20,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post('create')
-  @Roles('ADMIN', 'MANAGER', 'MEMBER')
+  @Roles('MEMBER')
   createOrder(
     @Body()
     body: {
@@ -32,7 +32,7 @@ export class OrderController {
   }
 
   @Post('checkout/:id')
-  @Roles('ADMIN', 'MANAGER')
+  @Roles('MANAGER')
   placeOrder(
     @Param('id') id: string,
     @Body()
@@ -45,13 +45,13 @@ export class OrderController {
   }
 
   @Delete('cancel/:id')
-  @Roles('ADMIN', 'MANAGER')
+  @Roles('MANAGER')
   cancel(@Param('id') id: string, @Req() req: Request) {
     return this.orderService.cancelOrder(id, req.user);
   }
 
   @Get()
-  @Roles('ADMIN', 'MANAGER', 'MEMBER')
+  @Roles('MEMBER')
   getOrders(@Req() req: Request) {
     return this.orderService.getOrders(req.user);
   }
